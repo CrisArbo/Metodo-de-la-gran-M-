@@ -59,41 +59,71 @@ El programa se ejecutará por consola.
 
 ## 4. Ejemplo completo
 
-Supongamos:
+Se puede usar como ejemplo el problema presentado en las diapositivas:
 
 ```text
-Maximizar Z = 3x1 + 2x2
+Maximizar Z = 10x1 + 20x2 + 15x3
 
-x1 + x2 <= 4
-x1 <= 2
+Sujeto a:
+
+x1 + x2 + x3 <= 10
+x1 + 2x2     >= 6
+x2 + x3      = 4
+
+x1, x2, x3 >= 0
 ```
 
-Las respuestas deben ingresar este contenido en este orden:
+Las respuestas deben ingresarse en este orden desde la consola:
 
 ```text
 1
-2
 3
+10
+20
+15
+3
+1
+1
+1
+1
+10
+1
 2
-2
-1
-1
-1
-<=
-4
-1
 0
-<=
 2
+6
+0
+1
+1
+3
+4
 ```
 
-En ese ejemplo:
+El significado de cada entrada es:
 
-- `1` indica maximización.
-- `2` indica dos variables.
-- `3` y `2` son los coeficientes de `Z`.
-- `2` indica dos restricciones.
-- Los siguientes números representan cada restricción.
+- `1`: maximizar la función objetivo.
+- `3`: existen tres variables originales.
+- `10`, `20` y `15`: coeficientes de `x1`, `x2` y `x3` en `Z`.
+- `3`: existen tres restricciones.
+- `1`, `1`, `1`, `1`, `10`: primera restricción `x1 + x2 + x3 <= 10`.
+- `1`, `2`, `0`, `2`, `6`: segunda restricción `x1 + 2x2 >= 6`.
+- `0`, `1`, `1`, `3`, `4`: tercera restricción `x2 + x3 = 4`.
+
+Las variables extra que el programa puede generar son:
+
+- `S1`: holgura de la primera restricción.
+- `E1`: exceso de la segunda restricción.
+- `R1`: variable artificial de la segunda restricción.
+- `R2`: variable artificial de la tercera restricción.
+
+La solución esperada para este problema es:
+
+```text
+Z = 140
+x1 = 6
+x2 = 4
+x3 = 0
+```
 
 ---
 
