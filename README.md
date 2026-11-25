@@ -1,881 +1,220 @@
-# Método de la Gran M
+# Método de la Gran M - Programación Lineal
 
 ## 1. Descripción general del software
 
-Este programa resuelve problemas de **programación lineal** desde la consola usando el **Método simplex** y el **Método de la Gran M**.
+Este programa resuelve problemas de **programación lineal** utilizando el **Método simplex** y el **Método de la Gran M**.
 
-El usuario introduce:
+Cuenta con una **interfaz gráfica sencilla y moderna construida en Python con Tkinter**, diseñada para ser intuitiva, rápida de usar y totalmente transparente en su procedimiento matemático.
 
-1. Si desea maximizar o minimizar.
-2. La cantidad de variables originales.
-3. Los coeficientes de la función objetivo.
-4. La cantidad de restricciones.
-5. Los coeficientes, el signo y el resultado de cada restricción.
+El usuario puede:
+1. Elegir si el objetivo es **Maximizar** o **Minimizar**.
+2. Definir la cantidad de **variables de decisión** ($x_1, x_2, \dots$) y la cantidad de **restricciones**.
+3. Generar dinámicamente las casillas del formulario con un solo clic.
+4. Ingresar los coeficientes de la **función objetivo ($Z$)**.
+5. Ingresar cada **restricción**, seleccionando el signo correspondiente ($\le$, $\ge$, $=$) y el valor del lado derecho.
+6. Resolver el problema y visualizar en pantalla la **Tabla Inicial**, todas las **Iteraciones Simplex paso a paso** con las operaciones de Gauss-Jordan, y el **Resultado Final** (valor óptimo de $Z$ y valores de las variables).
 
-Después, el programa:
-
-1. Convierte las restricciones en ecuaciones.
-2. Agrega variables de holgura, exceso y artificiales.
-3. Construye una tabla simplex.
-4. Limpia las variables artificiales de la fila Z.
-5. Encuentra iterativamente la variable que entra y la que sale.
-6. Aplica operaciones de Gauss-Jordan.
-7. Presenta el óptimo o informa que no existe solución.
-
-No utiliza una librería externa de optimización. La resolución se implementa manualmente con listas y operaciones aritméticas.
+El programa no utiliza librerías externas de optimización ni paquetes comerciales (como SciPy, PuLP o Gurobi). Todo el algoritmo simplex manual está programado desde cero usando únicamente la librería estándar de Python.
 
 ---
 
-## 2. Tecnologías utilizadas
+## 2. Tecnologías utilizadas y justificación
 
-| Tecnología | Uso dentro del programa |
-|---|---|
-| Python 3 | Lenguaje utilizado para todo el programa |
-| `input()` | Solicita datos al usuario |
-| `print()` | Muestra tablas y resultados |
-| `while` y `for` | Controlan menús, lecturas e iteraciones |
-| Listas de Python | Guardan restricciones, nombres de columnas y tablas |
-| Cadenas `str` | Guardan nombres como `x1`, `S1`, `E1` y `R1` |
-| Números `float` | Guardan coeficientes, resultados y cálculos |
-| Operaciones de punto flotante | Permiten ejecutar el pivoteo simplex |
+| Tecnología / Módulo | Tipo | Para qué se usa y por qué se eligió |
+|---|---|---|
+| Python 3 | Lenguaje base | Lenguaje de programación principal, legible, multiplataforma y estándar en ingeniería. |
+| `tkinter` | Módulo estándar | Proporciona la ventana gráfica de usuario. Viene preinstalado con Python, por lo que no requiere descargas con `pip`. |
+| `tkinter.ttk` | Submódulo gráfico | Widgets con diseño gráfico más moderno y limpio (botones, casillas, marcos y listas desplegables). |
+| `tkinter.scrolledtext` | Submódulo gráfico | Área de texto con barras de desplazamiento para visualizar las tablas simplex completas sin cortes. |
+| `tkinter.messagebox` | Submódulo gráfico | Ventanas emergentes de aviso en caso de que el usuario ingrese letras, símbolos o campos incompletos. |
+| Listas y matrices de Python | Estructura de datos | Almacenan coeficientes, filas de restricciones, nombres de columnas y la tabla simplex completa. |
+| Operaciones aritméticas manuales | Algoritmo | Implementan las operaciones elementales de fila de Gauss-Jordan paso a paso. |
 
-El programa no necesita instalar paquetes con `pip`.
+El programa **no requiere instalar librerías externas**. Funciona en cualquier equipo con Python 3 instalado.
 
 ---
 
-## 3. Requisitos y ejecución
+## 3. Requisitos, descarga y ejecución
 
-Requiere tener Python 3 instalado.
+### 3.1. Requisitos
 
-Desde la carpeta del proyecto, ejecuta:
+- **Python 3** (versión 3.8 o superior). Se descarga gratuitamente desde [python.org](https://www.python.org/downloads/).
+- En Windows y macOS, `tkinter` viene incluido automáticamente con la instalación estándar de Python.
+- En sistemas Linux (Ubuntu/Debian), si no estuviera instalado, se instala con:
+  ```bash
+  sudo apt install python3-tk
+  ```
+
+---
+
+### 3.2. Cómo descargar el proyecto
+
+Puedes obtener el programa en cualquier computadora mediante cualquiera de estas opciones:
+
+#### Opción A: Clonar con Git (Recomendada)
+Abre la terminal o PowerShell y escribe:
+
+```bash
+git clone https://github.com/CrisArbo/Metodo-de-la-gran-M-.git
+cd Metodo-de-la-gran-M-
+```
+
+#### Opción B: Descargar directamente el archivo `gran_m.py`
+Desde la terminal:
+
+```powershell
+curl -O https://raw.githubusercontent.com/CrisArbo/Metodo-de-la-gran-M-/main/gran_m.py
+```
+
+O desde el navegador: abre [https://raw.githubusercontent.com/CrisArbo/Metodo-de-la-gran-M-/main/gran_m.py](https://raw.githubusercontent.com/CrisArbo/Metodo-de-la-gran-M-/main/gran_m.py), haz clic derecho y selecciona **Guardar como...** con el nombre `gran_m.py`.
+
+#### Opción C: Descargar como archivo ZIP
+1. Entra al repositorio en GitHub: [https://github.com/CrisArbo/Metodo-de-la-gran-M-](https://github.com/CrisArbo/Metodo-de-la-gran-M-)
+2. Haz clic en el botón verde **Code** y elige **Download ZIP**.
+3. Descomprime el archivo y abre una terminal en la carpeta resultante.
+
+---
+
+### 3.3. Ejecución
+
+Dentro de la carpeta donde se encuentra `gran_m.py`, ejecuta:
 
 ```powershell
 python gran_m.py
 ```
 
-El programa se ejecutará por consola.
+Se abrirá inmediatamente la ventana gráfica del programa.
 
 ---
 
-## 4. Ejemplo completo
+## 4. Modo de uso paso a paso
 
-Se puede usar como ejemplo el problema presentado en las diapositivas:
+1. **Configuración inicial:**
+   - Selecciona si deseas **Maximizar** o **Minimizar**.
+   - Ingresa cuántas **variables** tiene tu problema (por ejemplo, `2` o `3`).
+   - Ingresa cuántas **restricciones** tiene tu problema.
+   - Haz clic en el botón **Generar campos**.
 
-```text
-Maximizar Z = 10x1 + 20x2 + 15x3
+2. **Ingreso de datos en el formulario:**
+   - En la sección **Función Objetivo (Z)**, escribe los coeficientes que acompañan a cada variable ($x_1, x_2, \dots$).
+   - En la sección **Restricciones**, escribe los coeficientes de cada variable para cada fila.
+   - Selecciona en el selector desplegable el signo de la restricción: `<=`, `>=` o `=`.
+   - Escribe el valor del lado derecho (término independiente) después del signo.
+   - *Nota:* Si una variable no participa en una restricción o en la función objetivo, puedes escribir `0` o dejar la casilla en blanco (el programa la interpretará automáticamente como `0.0`).
 
-Sujeto a:
+3. **Resolución:**
+   - Haz clic en **Resolver**.
+   - En la parte inferior se generarán todas las tablas simplex alineadas:
+     - **Tabla inicial:** Con las variables de holgura ($S$), exceso ($E$) y artificiales ($R$) añadidas y la fila $Z$ debidamente limpiada de penalizaciones.
+     - **Iteraciones:** Cada paso indicará qué variable entra a la base, qué variable sale y cómo se transformaron las filas tras el pivoteo de Gauss-Jordan.
+     - **Resultado final:** Mostrará el valor óptimo de $Z$ y el valor numérico de cada variable de decisión. Si el problema no tiene solución, indicará claramente si es *infactible* o *no acotado*.
 
-x1 + x2 + x3 <= 10
-x1 + 2x2     >= 6
-x2 + x3      = 4
-
-x1, x2, x3 >= 0
-```
-
-Las respuestas deben ingresarse en este orden desde la consola:
-
-```text
-1
-3
-10
-20
-15
-3
-1
-1
-1
-1
-10
-1
-2
-0
-2
-6
-0
-1
-1
-3
-4
-```
-
-El significado de cada entrada es:
-
-- `1`: maximizar la función objetivo.
-- `3`: existen tres variables originales.
-- `10`, `20` y `15`: coeficientes de `x1`, `x2` y `x3` en `Z`.
-- `3`: existen tres restricciones.
-- `1`, `1`, `1`, `1`, `10`: primera restricción `x1 + x2 + x3 <= 10`.
-- `1`, `2`, `0`, `2`, `6`: segunda restricción `x1 + 2x2 >= 6`.
-- `0`, `1`, `1`, `3`, `4`: tercera restricción `x2 + x3 = 4`.
-
-Las variables extra que el programa puede generar son:
-
-- `S1`: holgura de la primera restricción.
-- `E1`: exceso de la segunda restricción.
-- `R1`: variable artificial de la segunda restricción.
-- `R2`: variable artificial de la tercera restricción.
-
-La solución esperada para este problema es:
-
-```text
-Z = 140
-x1 = 6
-x2 = 4
-x3 = 0
-```
+4. **Nuevo problema:**
+   - Puedes hacer clic en **Limpiar** para vaciar las casillas y resolver otro ejercicio.
 
 ---
 
-## 5. Conceptos matemáticos usados
+## 5. Explicación del código paso a paso
 
-### 5.1. Variables originales
+El programa está contenido en el archivo [gran_m.py](gran_m.py) y se divide en dos grandes bloques: la **lógica matemática del método** y la **interfaz gráfica de usuario**.
 
-Las variables originales son las que aparecen en el problema:
-
-```text
-x1, x2, x3, ...
-```
-
-Sus coeficientes se leen al inicio y después se usan tanto en la fila Z como en las restricciones.
-
-### 5.2. Variables de holgura
-
-Una restricción menor o igual:
-
-```text
-x1 + x2 <= 4
-```
-
-se transforma en:
-
-```text
-x1 + x2 + S1 = 4
-```
-
-`S1` representa la cantidad que falta para alcanzar exactamente el lado derecho.
-
-Si se usan completamente los recursos, la holgura puede valer cero.
-
-### 5.3. Variables de exceso
-
-Una restricción mayor o igual:
-
-```text
-x1 + x2 >= 4
-```
-
-se transforma en:
-
-```text
-x1 + x2 - E1 + R1 = 4
-```
-
-`E1` representa la cantidad que excede el mínimo requerido.
-
-### 5.4. Variables artificiales
-
-Las variables artificiales se llaman `R` en el programa.
-
-Se necesitan para construir una solución básica inicial en restricciones `>=` e `=`, porque no siempre existe una variable natural que pueda comenzar con valor positivo en la base.
-
-Una variable artificial no debe aparecer en la solución final. Por eso se penaliza con `M`.
-
-### 5.5. Constante M
+### 5.1. Declaración de la constante M
 
 ```python
-M = 1000
+M = 1000.0
 ```
 
-`M` representa una penalización grande.
-
-- En maximización se usa `+M` en las columnas artificiales.
-- En minimización se usa `-M`.
-
-Como una solución real no puede depender de una variable artificial, el algoritmo intenta expulsarla de la base.
-
-### 5.6. Variable básica
-
-Una variable básica es una variable que tiene un valor definido por una fila de la tabla.
-
-La lista `base` guarda cuál variable corresponde a cada fila.
-
-Ejemplo:
-
-```python
-base = ["S1", "R1"]
-```
-
-Esto significa:
-
-- La primera restricción tiene como variable básica `S1`.
-- La segunda restricción tiene como variable básica `R1`.
-
-### 5.7. Pivote
-
-El pivote es la intersección de:
-
-- Una variable que entra: determina una nueva columna.
-- Una variable que sale: determina una fila.
-
-El valor ubicado en esa intersección se normaliza a `1`, y el resto de su columna se convierte en ceros.
+- **Qué hace:** Define el valor numérico de la constante de penalización $M$.
+- **Por qué se usa:** En programación lineal, $M$ representa un número positivo arbitrariamente grande. Como las computadoras trabajan con números concretos, se utiliza `1000.0`, un valor suficientemente alto frente a los coeficientes normales para garantizar que el algoritmo expulse las variables artificiales de la base.
 
 ---
 
-## 6. Bloque 1: declaración de M
+### 5.2. Función matemática: `resolver_gran_m`
 
+Esta función contiene toda la resolución simplex manual y recibe 4 parámetros:
+- `objetivo`: texto `"max"` o `"min"`.
+- `num_x`: cantidad de variables originales ($x_1, x_2, \dots$).
+- `coef_z`: lista con los coeficientes numéricos de la función objetivo.
+- `restricciones`: lista donde cada elemento es `[fila_coeficientes, signo, lado_derecho]`.
+
+#### Paso 1: Normalización de lados derechos negativos
 ```python
-M = 1000
+restricciones_proc = []
+for fila_orig, signo_orig, rhs_orig in restricciones:
+    fila = list(fila_orig)
+    signo = signo_orig
+    rhs = float(rhs_orig)
+    if rhs < 0:
+        fila = [-val for val in fila]
+        rhs = -rhs
+        if signo == "<=":
+            signo = ">="
+        elif signo == ">=":
+            signo = "<="
+    restricciones_proc.append([fila, signo, rhs])
 ```
+- **Por qué:** El Método Simplex exige que todos los valores del lado derecho sean no negativos ($b \ge 0$). Si un usuario ingresa por ejemplo $x_1 + x_2 \le -5$, se multiplica toda la inecuación por $-1$, quedando $-x_1 - x_2 \ge 5$.
 
-### Qué hace
-
-Declara una constante global con el valor `1000`.
-
-### Para qué sirve
-
-Se utiliza como penalización para las variables artificiales `R`.
-
-### Observación
-
-Cuanto mayor sea el objetivo de minimizar o maximizar una solución artificial frente a una real, se debe usar una `M` suficientemente grande.
-
-En este programa el valor está fijado y no se pregunta al usuario.
-
----
-
-## 7. Bloque 2: selección del objetivo
-
+#### Paso 2: Creación de variables de holgura (S), exceso (E) y artificiales (R)
 ```python
-print("=== MÉTODO DE LA GRAN M ===")
-while True:
-    op_obj = input(
-        "¿Qué deseas hacer? (1: Maximizar, 2: Minimizar): "
-    ).strip().lower()
-```
-
-### Qué hace
-
-- Muestra el título del programa.
-- Abre un ciclo `while True`.
-- Solicita qué operación desea realizar el usuario.
-- `.strip()` elimina espacios al inicio y al final.
-- `.lower()` convierte el texto a minúsculas.
-
-### Condición de maximización
-
-```python
-if op_obj in ["1", "max"]:
-    objetivo = "max"
-    break
-```
-
-Si el usuario escribe `1` o `max`:
-
-- Guarda `objetivo = "max"`.
-- Ejecuta `break`.
-- Sale del ciclo.
-
-### Condición de minimización
-
-```python
-elif op_obj in ["2", "min"]:
-    objetivo = "min"
-    break
-```
-
-Si escribe `2` o `min`:
-
-- Guarda `objetivo = "min"`.
-- Sale del ciclo.
-
-### Entrada inválida
-
-```python
-print("  [!] Opción no válida. Escribe 1 o 2.")
-```
-
-Si no coincide con ninguna opción, vuelve a pedir el dato.
-
----
-
-## 8. Bloque 3: cantidad de variables
-
-```python
-num_x = int(input(
-    "¿Cuántas variables (x) tiene tu problema?: "
-))
-```
-
-### Qué hace
-
-- Solicita un número.
-- Convierte el texto recibido a entero mediante `int()`.
-- Guarda el resultado en `num_x`.
-
-### Ejemplo
-
-Si escribe `3`, el programa trabajará con:
-
-```text
-x1, x2, x3
-```
-
----
-
-## 9. Bloque 4: coeficientes de la función objetivo
-
-```python
-coef_z = []
-for i in range(num_x):
-    valor = float(input(
-        f"  Ingresa el valor que acompaña a x{i + 1}: "
-    ))
-    coef_z.append(valor)
-```
-
-### Paso a paso
-
-1. `coef_z = []` crea una lista vacía.
-2. `range(num_x)` genera tantos ciclos como variables existen.
-3. `i + 1` convierte el índice 0, 1, 2 en `x1`, `x2`, `x3`.
-4. `float()` convierte el dato a número decimal.
-5. `append()` agrega el número al final de `coef_z`.
-
-### Ejemplo
-
-Si los coeficientes son `3` y `2`, la lista queda:
-
-```python
-coef_z = [3.0, 2.0]
-```
-
-La función objetivo representada sería:
-
-```text
-Z = 3x1 + 2x2
-```
-
----
-
-## 10. Bloque 5: cantidad de restricciones
-
-```python
-num_rest = int(input(
-    "\n¿Cuántas restricciones tiene tu problema?: "
-))
-```
-
-Convierte la cantidad ingresada en un entero y la guarda en `num_rest`.
-
-Esta cantidad determina cuántas filas tendrá la parte inferior de la tabla simplex.
-
----
-
-## 11. Bloque 6: lectura de las restricciones
-
-```python
-restricciones = []
 for i in range(num_rest):
+    signo = restricciones_proc[i][1]
+    if signo == "<=":
+        nombre = f"S{cont_s}"
+        cont_s += 1
+        vars_extra.append([nombre, i, 1.0])
+        base.append(nombre)
+    elif signo == ">=":
+        nombre_e = f"E{cont_e}"
+        nombre_r = f"R{cont_r}"
+        cont_e += 1
+        cont_r += 1
+        vars_extra.append([nombre_e, i, -1.0])
+        vars_extra.append([nombre_r, i, 1.0])
+        base.append(nombre_r)
+    elif signo == "=":
+        nombre_r = f"R{cont_r}"
+        cont_r += 1
+        vars_extra.append([nombre_r, i, 1.0])
+        base.append(nombre_r)
 ```
-
-`restricciones` será una lista que contiene cada restricción.
-
-Por ejemplo:
-
-```python
-[
-    [[1.0, 1.0], "<=", 4.0],
-    [[1.0, 0.0], "<=", 2.0]
-]
-```
-
-Cada elemento tiene esta estructura:
-
-```python
-[[coeficientes], signo, lado_derecho]
-```
-
----
-
-## 12. Lectura de los coeficientes de una restricción
-
-```python
-fila_x = []
-for j in range(num_x):
-    valor = float(input(f"  Valor de x{j + 1}: "))
-    fila_x.append(valor)
-```
-
-### Qué hace
-
-Pide el coeficiente de cada variable dentro de una restricción.
-
-### Ejemplo
-
-Para:
-
-```text
-2x1 + 3x2 <= 10
-```
-
-La lista será:
-
-```python
-fila_x = [2.0, 3.0]
-```
-
----
-
-## 13. Lectura y validación del signo
-
-```python
-while True:
-    op_signo = input(
-        "  Signo (1: <=,  2: >=,  3: =): "
-    ).strip()
-```
-
-Este ciclo continúa hasta que se ingrese un signo válido.
-
-### Opciones aceptadas
-
-```python
-if op_signo in ["1", "<=", "<"]:
-    signo = "<="
-```
-
-Acepta:
-
-- `1`
-- `<=`
-- `<`
-
-Aunque `<` no es estándar en programación lineal, el programa lo normaliza a `<=`.
-
-```python
-elif op_signo in ["2", ">=", ">"]:
-    signo = ">="
-```
-
-Acepta `2`, `>=` o `>`.
-
-```python
-elif op_signo in ["3", "="]:
-    signo = "="
-```
-
-Acepta `3` o `=`.
-
-Si no coincide ninguna opción:
-
-```python
-print("  [!] Opción no válida. Escribe 1, 2 o 3.")
-```
-
-El ciclo vuelve a solicitar el signo.
-
----
-
-## 14. Lectura del lado derecho
-
-```python
-resultado = float(input("  Número después del signo: "))
-```
-
-Pide el valor al lado derecho del signo y lo convierte a `float`.
-
-Ejemplo:
-
-```text
-2x1 + x2 <= 8
-```
-
-El resultado es:
-
-```python
-resultado = 8.0
-```
-
----
-
-## 15. Normalización de resultados negativos
-
-```python
-if resultado < 0:
-```
-
-La tabla simplex trabaja mejor cuando el lado derecho es positivo o cero.
-
-Si el resultado es negativo, el programa modifica toda la fila:
-
-```python
-for j in range(num_x):
-    fila_x[j] = -fila_x[j]
-resultado = -resultado
-```
-
-Esto cambia el signo de cada coeficiente y cambia el resultado a positivo.
-
-Después invierte el signo original:
-
-```python
-if signo == "<=":
-    signo = ">="
-elif signo == ">=":
-    signo = "<="
-```
-
-### Ejemplo
-
-Entrada:
-
-```text
--x1 + 2x2 <= -6
-```
-
-Después de normalizar:
-
-```text
-x1 - 2x2 >= 6
-```
-
-Esto es una transformación algebraicamente equivalente.
-
----
-
-## 16. Guardado de la restricción
-
-```python
-restricciones.append([fila_x, signo, resultado])
-```
-
-Cada restricción queda guardada como una mini-lista:
-
-```python
-[coeficientes, signo, lado_derecho]
-```
-
-Después se repite el ciclo para leer la siguiente restricción.
-
----
-
-## 17. Bloque 7: nombres de las variables originales
-
-```python
-columnas = []
-for j in range(num_x):
-    columnas.append(f"x{j + 1}")
-```
-
-`columnas` representa todas las columnas de la tabla.
-
-Si existen 3 variables, comienza como:
-
-```python
-columnas = ["x1", "x2", "x3"]
-```
-
----
-
-## 18. Variables básicas y variables extra
-
-```python
-base = []
-vars_extra = []
-cont_s, cont_e, cont_r = 1, 1, 1
-```
-
-### Variables
-
-- `base`: variables básicas por fila.
-- `vars_extra`: holguras, excesos y artificiales creados.
-- `cont_s`: contador para `S1`, `S2`, etc.
-- `cont_e`: contador para `E1`, `E2`, etc.
-- `cont_r`: contador para `R1`, `R2`, etc.
-
-Cada elemento de `vars_extra` tendrá esta forma:
-
-```python
-[nombre, fila_donde_va, valor]
-```
-
-Ejemplo:
-
-```python
-["S1", 0, 1.0]
-```
-
-Significa:
-
-- Nombre: `S1`.
-- Se coloca en la fila de la restricción índice `0`.
-- Su coeficiente es `1`.
-
----
-
-## 19. Creación de holguras
-
-```python
-if signo == "<=":
-    nombre = f"S{cont_s}"
-    cont_s += 1
-    vars_extra.append([nombre, i, 1.0])
-    base.append(nombre)
-```
-
-Para una restricción `<=`:
-
-1. Crea una variable `S`.
-2. Incrementa el contador de holguras.
-3. Agrega la holgura con coeficiente `1`.
-4. La pone en la lista `base`.
-
-Ejemplo:
-
-```text
-restricción 1 <=
-```
-
-Crea:
-
-```python
-base = ["S1"]
-```
-
----
-
-## 20. Creación de exceso y artificial
-
-```python
-elif signo == ">=":
-    nombre_e = f"E{cont_e}"
-    nombre_r = f"R{cont_r}"
-```
-
-Para una restricción `>=` crea dos variables:
-
-- `E` con coeficiente `-1`.
-- `R` con coeficiente `+1`.
-
-```python
-vars_extra.append([nombre_e, i, -1.0])
-vars_extra.append([nombre_r, i, 1.0])
-base.append(nombre_r)
-```
-
-La variable artificial `R` se coloca como variable básica inicial.
-
----
-
-## 21. Creación de una artificial para igualdad
-
-```python
-elif signo == "=":
-    nombre_r = f"R{cont_r}"
-    cont_r += 1
-    vars_extra.append([nombre_r, i, 1.0])
-    base.append(nombre_r)
-```
-
-Una restricción de igualdad no necesita variable de exceso ni holgura. Solo necesita una variable artificial para obtener una solución básica inicial.
-
----
-
-## 22. Incorporación de variables extra a las columnas
-
-```python
-for item in vars_extra:
-    columnas.append(item[0])
-columnas.append("Solucion")
-```
-
-Todos los nombres de `vars_extra` se agregan al vector `columnas`.
-
-Después se agrega `"Solucion"`, que representa el lado derecho de cada ecuación.
-
-Ejemplo:
-
-```python
-columnas = [
-    "x1", "x2", "S1", "E1", "R1", "Solucion"
-]
-```
-
----
-
-## 23. Cantidad total de columnas
-
-```python
-total_cols = len(columnas)
-```
-
-Guarda cuántas columnas tiene la tabla.
-
-Esta cantidad se utiliza en ciclos y formatos de impresión.
-
----
-
-## 24. Construcción de la fila Z
-
+- **Por qué:** 
+  - Restricciones $\le$: se suma una variable de holgura $+S$ que entra a la base inicial.
+  - Restricciones $\ge$: se resta una variable de exceso $-E$ y se suma una artificial $+R$. La variable $R$ entra a la base inicial.
+  - Restricciones $=$: se suma una variable artificial $+R$ que entra a la base inicial.
+
+#### Paso 3: Construcción de la fila Z y penalización de las variables R
 ```python
 fila_z = [0.0] * total_cols
-```
-
-Crea una fila llena de ceros.
-
-El índice inicial corresponde a la fila Z, aunque la estructura real de la tabla es:
-
-```text
-tabla[0] = fila Z
-tabla[1] = restricción 1
-tabla[2] = restricción 2
-```
-
----
-
-## 25. Signo de los coeficientes originales en Z
-
-```python
 for j in range(num_x):
-    fila_z[j] = -coef_z[j]
-```
+    fila_z[j] = -float(coef_z[j])
 
-Los coeficientes originales se colocan con signo negativo para permitir el criterio simplex usado por el programa.
-
-Ejemplo:
-
-```python
-coef_z = [3.0, 2.0]
-```
-
-produce:
-
-```python
-fila_z = [-3.0, -2.0, ...]
-```
-
----
-
-## 26. Penalización de variables artificiales
-
-```python
 for c in range(total_cols):
     if columnas[c].startswith("R"):
         fila_z[c] = M if objetivo == "max" else -M
 ```
+- **Por qué:** 
+  - En la ecuación simplex $Z - c_1 x_1 - \dots = 0$, los coeficientes de las variables de decisión entran con signo negativo a la fila $Z$.
+  - Las variables artificiales $R$ se penalizan fuertemente: $+M$ en maximización (para que resten en la ganancia) y $-M$ en minimización.
 
-### Qué hace
-
-Recorre las columnas y busca nombres que comienzan con `R`.
-
-### Maximización
-
-```python
-fila_z[c] = M
-```
-
-Usa una penalización positiva.
-
-### Minimización
-
-```python
-fila_z[c] = -M
-```
-
-Usa una penalización negativa.
-
-Las demás columnas artificiales no reciben este cambio.
-
----
-
-## 27. Construcción de las filas de restricciones
-
+#### Paso 4: Construcción de la matriz de la tabla
 ```python
 tabla = [fila_z]
 for i in range(num_rest):
     fila = [0.0] * total_cols
-```
+    for j in range(num_x):
+        fila[j] = float(restricciones_proc[i][0][j])
+    fila[-1] = float(restricciones_proc[i][2])
+    tabla.append(fila)
 
-La tabla comienza con la fila Z.
-
-Luego se crea una fila de ceros por cada restricción.
-
----
-
-## 28. Copia de coeficientes originales
-
-```python
-for j in range(num_x):
-    fila[j] = restricciones[i][0][j]
-```
-
-Copia en la tabla los coeficientes de las variables originales.
-
-Ejemplo:
-
-```python
-restricciones[i][0] = [2.0, 3.0]
-```
-
-Se coloca:
-
-```text
-fila[x1] = 2
-fila[x2] = 3
-```
-
----
-
-## 29. Copia del lado derecho
-
-```python
-fila[-1] = restricciones[i][2]
-tabla.append(fila)
-```
-
-- `fila[-1]` selecciona la última posición, que corresponde a `Solucion`.
-- `tabla.append(fila)` agrega la fila a la tabla.
-
----
-
-## 30. Ubicación de holguras, excesos y artificiales
-
-```python
 for idx_extra in range(len(vars_extra)):
     fila_destino = vars_extra[idx_extra][1] + 1
     valor = vars_extra[idx_extra][2]
     tabla[fila_destino][num_x + idx_extra] = valor
 ```
+- **Por qué:** Se crea una matriz bidimensional (lista de listas) donde la fila 0 es la fila $Z$ y las filas siguientes corresponden a cada restricción con sus coeficientes y su término independiente al final.
 
-### `fila_destino`
-
-Se suma `1` porque la fila `0` está reservada para Z.
-
-Ejemplo:
-
-- Restricción índice `0`.
-- Fila real en tabla: `0 + 1 = 1`.
-
-### `num_x + idx_extra`
-
-Indica la posición de la variable extra dentro de `columnas`.
-
-Las variables originales ocupan las primeras `num_x` posiciones.
-
-### `valor`
-
-Puede ser:
-
-- `1.0` para una holgura o artificial.
-- `-1.0` para una variable de exceso.
-
-Este bloque convierte la fila de ceros en una ecuación concreta.
-
----
-
-## 31. Limpieza de las M básicas
-
+#### Paso 5: Limpieza de la fila Z (Condición Canónica)
 ```python
 for i in range(num_rest):
     if base[i].startswith("R"):
@@ -884,656 +223,141 @@ for i in range(num_rest):
         for c in range(total_cols):
             tabla[0][c] = tabla[0][c] - multiplicador * tabla[i + 1][c]
 ```
+- **Por qué:** En el Método Simplex, toda variable básica **debe tener coeficiente cero** en la fila $Z$. Como las variables $R$ empiezan en la base pero tienen coeficientes $\pm M$ en la fila $Z$, debemos restar de la fila $Z$ el múltiplo de la fila de cada restricción donde se encuentra $R$.
 
-### Por qué es necesario
+#### Paso 6: Bucle de iteraciones simplex (Gauss-Jordan)
+```python
+while iteracion <= 100:
+    # 1. Columna pivote (variable que entra)
+    col_pivote = -1
+    if objetivo == "max":
+        mejor_valor = -0.00001
+        for c in range(total_cols - 1):
+            if tabla[0][c] < mejor_valor:
+                mejor_valor = tabla[0][c]
+                col_pivote = c
+    else:
+        mejor_valor = 0.00001
+        for c in range(total_cols - 1):
+            if tabla[0][c] > mejor_valor:
+                mejor_valor = tabla[0][c]
+                col_pivote = c
 
-Una variable artificial que ya está en la base no puede tener un valor distinto de cero en la fila Z.
-
-Este bloque elimina la penalización `M` de la fila Z aplicando una operación elemental.
-
-### Explicación de variables
-
-- `base[i]`: variable básica de la fila `i`.
-- `startswith("R")`: comprueba si la variable es artificial.
-- `col_r`: posición de esa variable artificial.
-- `multiplicador`: valor que está en la fila Z en la columna `R`.
-- `tabla[i + 1][c]`: fila de la restricción básica.
-
-La operación:
+    if col_pivote == -1:
+        break # Ya no hay mejora posible: solucion optima alcanzada
+```
+- **Por qué:** 
+  - En **Maximizar**, entra la variable con el coeficiente más negativo en la fila $Z$.
+  - En **Minimizar**, entra la variable con el coeficiente más positivo en la fila $Z$.
+  - Si ningún coeficiente califica, el algoritmo concluye porque se alcanzó el óptimo.
 
 ```python
-tabla[0][c] =
-    tabla[0][c] - multiplicador * tabla[i + 1][c]
+    # 2. Fila pivote (variable que sale - razon minima)
+    fila_pivote = -1
+    menor_razon = float("inf")
+    for f in range(1, len(tabla)):
+        elemento = tabla[f][col_pivote]
+        if elemento > 0.00001:
+            razon = tabla[f][-1] / elemento
+            if razon < menor_razon:
+                menor_razon = razon
+                fila_pivote = f
+
+    if fila_pivote == -1:
+        return False, historial, "Problema no acotado (crece al infinito)."
 ```
-
-convierte en cero la columna correspondiente a esa variable artificial.
-
----
-
-## 32. Función para mostrar tablas
+- **Por qué:** 
+  - Se divide la columna Solución entre el elemento de la columna pivote, **únicamente si este es estrictamente positivo** ($> 0$).
+  - La fila con la menor razón positiva determina qué variable básica llega primero a cero y debe salir de la base.
+  - Si ningún elemento es positivo, significa que la variable puede crecer indefinidamente sin violar restricciones, por lo que el problema es **no acotado**.
 
 ```python
-def imprimir_tabla(titulo):
+    # 3. Operaciones de fila de Gauss-Jordan
+    base[fila_pivote - 1] = columnas[col_pivote]
+    pivote = tabla[fila_pivote][col_pivote]
+
+    for c in range(total_cols):
+        tabla[fila_pivote][c] = tabla[fila_pivote][c] / pivote
+
+    for f in range(len(tabla)):
+        if f != fila_pivote:
+            factor = tabla[f][col_pivote]
+            for c in range(total_cols):
+                tabla[f][c] = tabla[f][c] - factor * tabla[fila_pivote][c]
 ```
+- **Por qué:** 
+  - Se actualiza la variable en la base.
+  - Se divide la fila pivote entre el elemento pivote para convertirlo en `1.0`.
+  - En todas las demás filas (incluyendo la fila $Z$), se resta `factor * fila_pivote` para convertir en `0.0` los demás elementos de esa columna.
 
-Define una función reutilizable que recibe el texto que aparecerá como título.
-
-Las funciones permiten mostrar la tabla inicial y todas las iteraciones sin repetir el código de impresión.
-
----
-
-## 33. Encabezado de la tabla
-
+#### Paso 7: Comprobación de factibilidad y extracción de la solución
 ```python
-print(f"\n=== {titulo} ===")
-print("Base   |", end="")
-```
-
-Muestra el título y comienza la línea del encabezado sin terminarla con un salto de línea.
-
----
-
-## 34. Impresión de nombres de columnas
-
-```python
-for col in columnas:
-    print(f"{col:>9}", end="")
-```
-
-Recorre todas las columnas.
-
-`>9` alinea cada nombre a la derecha dentro de nueve caracteres.
-
----
-
-## 35. Línea separadora
-
-```python
-print("\n" + "-" * (9 * total_cols + 8))
-```
-
-Inicia una nueva línea y crea una línea horizontal según la cantidad de columnas.
-
----
-
-## 36. Asociación de filas con variables básicas
-
-```python
-nombres_filas = ["Z"] + base
-```
-
-Crea una lista donde:
-
-- La primera fila se llama `Z`.
-- Las siguientes filas toman el nombre de las variables básicas.
-
-Ejemplo:
-
-```python
-["Z", "S1", "R1"]
-```
-
----
-
-## 37. Impresión del contenido
-
-```python
-for i in range(len(tabla)):
-    print(f"{nombres_filas[i]:<6} |", end="")
-    for num in tabla[i]:
-        print(f"{num:9.2f}", end="")
-    print()
-```
-
-### Qué hace
-
-1. Recorre cada fila.
-2. Imprime su nombre.
-3. Recorre todos sus números.
-4. Los imprime con dos decimales.
-5. Cambia de línea al terminar la fila.
-
-Ejemplo de formato:
-
-```text
-Z     |    -3.00    -2.00     0.00
-S1    |     1.00     1.00     4.00
-```
-
----
-
-## 38. Impresión de la tabla inicial
-
-```python
-imprimir_tabla("TABLA INICIAL")
-```
-
-Llama a la función y muestra la tabla antes de comenzar las iteraciones.
-
----
-
-## 39. Bloque 8: iteraciones simplex
-
-```python
-iteracion = 1
-while True:
-```
-
-`iteracion` comienza en `1` y se utiliza para numerar las tablas.
-
-`while True` mantiene el proceso hasta que:
-
-- Se encuentra el óptimo.
-- Se detecta un problema ilimitado.
-- Se cumple otra condición de salida.
-
----
-
-## 40. Selección de la variable que entra
-
-```python
-col_pivote = -1
-```
-
-Inicialmente no existe una columna pivote.
-
-El valor `-1` indica que aún no se encontró una variable que pueda entrar.
-
----
-
-## 41. Criterio para maximización
-
-```python
-if objetivo == "max":
-    mejor_valor = -0.00001
-    for c in range(total_cols - 1):
-        if tabla[0][c] < mejor_valor:
-            mejor_valor = tabla[0][c]
-            col_pivote = c
-```
-
-### Qué hace
-
-Recorre todas las columnas excepto `Solucion`.
-
-Busca el coeficiente negativo más pequeño en la fila Z.
-
-`-0.00001` funciona como tolerancia:
-
-- Ignora valores cercanos a cero.
-- Reduce problemas causados por pequeños errores de punto flotante.
-
-Ejemplo:
-
-```text
-fila Z: [-3, 2, 0, -1]
-```
-
-La columna de `-3` sería elegida antes que la de `-1`.
-
----
-
-## 42. Criterio para minimización
-
-```python
-else:
-    mejor_valor = 0.00001
-    for c in range(total_cols - 1):
-        if tabla[0][c] > mejor_valor:
-            mejor_valor = tabla[0][c]
-            col_pivote = c
-```
-
-En minimización busca el coeficiente positivo más grande.
-
-Esto es el criterio contrario al utilizado para maximización.
-
----
-
-## 43. Óptimo encontrado
-
-```python
-if col_pivote == -1:
-    break
-```
-
-Si no se encontró ninguna columna mejor, no existe otra variable que pueda mejorar Z.
-
-El ciclo termina y el programa pasa al resultado final.
-
----
-
-## 44. Inicialización de la fila pivote
-
-```python
-fila_pivote = -1
-menor_razon = float("inf")
-```
-
-- `fila_pivote = -1`: ninguna fila ha sido seleccionada todavía.
-- `float("inf")`: representa infinito.
-- Cada razón válida debe ser menor que este valor inicial.
-
----
-
-## 45. Cálculo de la razón mínima
-
-```python
-for f in range(1, len(tabla)):
-    elemento = tabla[f][col_pivote]
-```
-
-Comienza desde `1` porque `0` es la fila Z.
-
-Recupera el elemento correspondiente a la columna que entró.
-
----
-
-## 46. Filas válidas para salir
-
-```python
-if elemento > 0.00001:
-```
-
-Solo se consideran filas cuyo elemento sea claramente positivo.
-
-Elementos negativos o cercanos a cero no deben producir una razón válida.
-
----
-
-## 47. Cálculo de la razón
-
-```python
-razon = tabla[f][-1] / elemento
-```
-
-Divide el lado derecho entre el elemento de la columna pivote:
-
-```text
-razón = Solución / elemento de la columna entrante
-```
-
----
-
-## 48. Selección de la razón mínima
-
-```python
-if razon < menor_razon:
-    menor_razon = razon
-    fila_pivote = f
-```
-
-Cada vez que encuentra una razón menor, actualiza:
-
-- La razón mínima.
-- La fila que debe salir.
-
-Por eso se obtiene la fila con la razón positiva mínima.
-
----
-
-## 49. Problema ilimitado
-
-```python
-if fila_pivote == -1:
-    print(
-        "\n[!] El problema NO tiene solución acotada "
-        "(crece al infinito)."
-    )
-    exit()
-```
-
-Si existe una variable que debería entrar pero ninguna fila puede salir:
-
-- El problema no tiene solución acotada.
-- El método termina inmediatamente.
-- `exit()` detiene la ejecución del programa.
-
----
-
-## 50. Cambio de la variable básica
-
-```python
-base[fila_pivote - 1] = columnas[col_pivote]
-```
-
-El índice `-1` corrige el desplazamiento causado por la fila Z.
-
-Ejemplo:
-
-- La fila pivote real es `tabla[2]`.
-- `fila_pivote - 1 = 1`.
-- La posición `1` de `base` cambia por la variable entrante.
-
----
-
-## 51. Obtención del pivote
-
-```python
-pivote = tabla[fila_pivote][col_pivote]
-```
-
-Guarda el número situado en la intersección entre la variable que entra y la fila que sale.
-
----
-
-## 52. Normalización de la fila pivote
-
-```python
-for c in range(total_cols):
-    tabla[fila_pivote][c] =
-        tabla[fila_pivote][c] / pivote
-```
-
-Cada elemento de la fila pivote se divide entre el pivote.
-
-Después de esta operación, el elemento pivote debe ser exactamente `1`.
-
----
-
-## 53. Conversión de ceros en la columna pivote
-
-```python
-for f in range(len(tabla)):
-    if f != fila_pivote:
-        factor = tabla[f][col_pivote]
-        for c in range(total_cols):
-            tabla[f][c] =
-                tabla[f][c]
-                - factor * tabla[fila_pivote][c]
-```
-
-### Qué hace
-
-Recorre todas las filas menos la fila pivote.
-
-`factor` es el valor que tiene cada fila en la columna que acaba de entrar.
-
-Luego resta una combinación lineal de la fila pivote para convertir ese factor en cero.
-
-Esto es el proceso de **Gauss-Jordan** aplicado a toda la tabla.
-
----
-
-## 54. Impresión de cada iteración
-
-```python
-imprimir_tabla(f"ITERACIÓN {iteracion}")
-iteracion += 1
-```
-
-Después de cada pivote:
-
-1. Se imprime la nueva tabla.
-2. Se incrementa el contador de iteración.
-
----
-
-## 55. Bloque 9: resultado final
-
-```python
-print(
-    "\n================ "
-    "RESULTADO FINAL "
-    "================"
-)
-```
-
-Muestra el título del resultado después de terminar las iteraciones.
-
----
-
-## 56. Comprobación de solución factible
-
-```python
-infactible = False
 for i in range(len(base)):
-    if base[i].startswith("R")
-       and tabla[i + 1][-1] > 0.001:
-        infactible = True
+    if base[i].startswith("R") and tabla[i + 1][-1] > 0.001:
+        return False, historial, "Problema infactible (no existe solucion factible)."
 ```
-
-Recorre todas las variables básicas.
-
-Si una variable artificial `R`:
-
-- Sigue estando en la base.
-- Tiene un valor mayor que `0.001`.
-
-entonces el problema no tiene solución factible.
-
-El valor `0.001` sirve como tolerancia porque los cálculos usan decimales.
+- **Por qué:** Si el algoritmo se detiene pero una variable artificial $R$ sigue en la base con valor positivo, significa que las restricciones se contradicen y el problema no tiene solución factible en el mundo real.
+- Si todas las $R$ salieron o valen cero, el valor óptimo de $Z$ se extrae de `tabla[0][-1]` y los valores de cada variable $x_j$ se leen de su fila correspondiente en la base.
 
 ---
 
-## 57. Mensaje de infactibilidad
+### 5.3. Interfaz gráfica: Clase `InterfazGranM`
 
+La clase `InterfazGranM` organiza visualmente todos los elementos de Tkinter.
+
+#### 1. Constructor `__init__`
 ```python
-if infactible:
-    print(
-        "El problema NO tiene solución factible "
-        "(quedó una variable R > 0)."
-    )
+def __init__(self, root):
+    self.root = root
+    self.root.title("Metodo de la Gran M - Programacion Lineal")
+    self.root.geometry("900x700")
+    self.entries_z = []
+    self.entries_rest = []
+    self.crear_widgets()
+    self.generar_campos()
 ```
+- **Qué hace:** Inicializa la ventana con tamaño 900x700 píxeles, prepara las listas de casillas y construye los componentes visuales.
 
-Significa que existe al menos una restricción que no puede cumplirse en una solución válida.
-
-No se muestran valores de las variables cuando se detecta infactibilidad.
-
----
-
-## 58. Presentación del valor óptimo
-
+#### 2. Canvas con Scrollbar para los datos
 ```python
-else:
-    print(f"Valor óptimo de Z = {tabla[0][-1]:.2f}")
+self.canvas = tk.Canvas(frame_datos, height=170, highlightthickness=0)
+scrollbar = ttk.Scrollbar(frame_datos, orient="vertical", command=self.canvas.yview)
+self.frame_interior = ttk.Frame(self.canvas)
 ```
+- **Por qué:** Si el usuario ingresa 8 o 10 restricciones, una ventana estática se desbordaría de la pantalla. Al incrustar el `frame_interior` dentro de un `Canvas` con barra de desplazamiento vertical, el formulario puede desplazarse suavemente sin importar cuántas restricciones tenga el modelo.
 
-Si existe una solución factible, la última posición de la fila Z contiene el valor óptimo.
+#### 3. Método `generar_campos`
+- **Qué hace:** Lee `entry_x` y `entry_rest`. Borra los campos anteriores con `.destroy()` y crea mediante un ciclo `for` las casillas de texto para $Z$ y cada una de las restricciones con su selector de signo y lado derecho.
+- **Validación:** Si el usuario escribe texto o números menores a 1, muestra una alerta con `messagebox.showwarning` en lugar de caerse.
 
-`:.2f` muestra el número con dos decimales.
+#### 4. Método `resolver`
+- **Qué hace:** 
+  1. Recorre `entries_z` y `entries_rest` obteniendo los valores escritos con `.get()`.
+  2. Convierte los textos a `float`. Si un campo quedó vacío, lo asume automáticamente como `0.0`.
+  3. Si el usuario ingresó letras o símbolos inválidos, captura el error con `try ... except ValueError` y notifica con `messagebox.showerror` indicando exactamente en qué variable o restricción está el error.
+  4. Llama a `resolver_gran_m(...)`.
+  5. Inserta el historial de tablas en el widget `ScrolledText` y actualiza la etiqueta de estado con el resultado final.
 
----
-
-## 59. Obtención del valor de cada variable original
-
+#### 5. Widget `ScrolledText` con fuente `Consolas`
 ```python
-for j in range(num_x):
-    nombre_x = f"x{j + 1}"
+self.txt_salida = scrolledtext.ScrolledText(frame_res, font=("Consolas", 10), wrap=tk.NONE)
 ```
-
-Recorre todas las variables originales.
-
----
-
-## 60. Variable básica encontrada
-
-```python
-if nombre_x in base:
-    fila_x = base.index(nombre_x) + 1
-    print(f"  {nombre_x} = "
-          f"{tabla[fila_x][-1]:.2f}")
-```
-
-Si la variable aparece en `base`:
-
-1. Busca su posición.
-2. Suma `1` para encontrar la fila real.
-3. Toma el valor de la columna `Solucion`.
-4. Lo muestra.
-
-Ejemplo:
-
-```text
-x1 está en la base
-base: ["x1", "S1"]
-fila de x1: tabla[1]
-tabla[1][-1]: 4
-```
-
-Resultado:
-
-```text
-x1 = 4.00
-```
+- **Por qué:** La fuente `Consolas` es monoespaciada (cada carácter, número o espacio tiene exactamente el mismo ancho físico en pantalla). Esto garantiza que las columnas de las tablas simplex se mantengan perfectamente derechas y legibles.
 
 ---
 
-## 61. Variable no básica
+## 6. Casos especiales y cómo los detecta el programa
 
-```python
-else:
-    print(f"  {nombre_x} = 0.00")
-```
-
-Si la variable no está en la base, su valor es cero.
-
-Esto ocurre porque las variables fuera de la base tienen valor cero en una solución básica.
+| Caso | Condición matemática | Cómo lo detecta el código | Mensaje mostrado |
+|---|---|---|---|
+| **Solución óptima** | Todos los coeficientes de la fila $Z$ cumplen la condición de parada ($\ge 0$ en Max, $\le 0$ en Min) y no quedan variables $R > 0$ en la base. | `col_pivote == -1` y ninguna $R$ básica tiene valor $> 0.001$. | `Solucion optima: Z = ...` |
+| **Problema no acotado** | Existe una variable candidata a entrar, pero todos los coeficientes de su columna en las restricciones son $\le 0$. | `fila_pivote == -1` tras recorrer todas las filas con `elemento > 0.00001`. | `Problema no acotado (crece al infinito).` |
+| **Problema infactible** | El algoritmo termina las iteraciones, pero una variable artificial $R$ permanece en la base con valor positivo. | Al finalizar, `base[i].startswith("R") and tabla[i + 1][-1] > 0.001`. | `Problema infactible (no existe solucion factible).` |
 
 ---
 
-## 7. Flujo completo del programa
+## 7. Archivos del proyecto
 
-```text
-Inicio
-  ↓
-Solicitar objetivo
-  ↓
-Solicitar cantidad y coeficientes de variables
-  ↓
-Solicitar cantidad y datos de restricciones
-  ↓
-Normalizar restricciones con lado derecho negativo
-  ↓
-Crear nombres de columnas
-  ↓
-Crear holguras, excesos y artificiales
-  ↓
-Construir la fila Z
-  ↓
-Construir las filas de restricciones
-  ↓
-Eliminar las M iniciales de las artificiales básicas
-  ↓
-Mostrar tabla inicial
-  ↓
-Buscar variable que entra
-  ↓
-¿Existe variable entrante?
-  Sí → Buscar fila que sale
-      ↓
-      ¿Existe fila válida?
-      Sí → Ejecutar pivote y repetir
-      No → Mostrar solución ilimitada
-  No → Comprobar si quedan artificiales positivas
-      ↓
-      Artificial positiva → No existe solución factible
-      Sin artificial positiva → Mostrar solución óptima
-```
-
----
-
-## 8. Cómo se interpreta una fila de la tabla
-
-Ejemplo:
-
-```text
-S1 | 1.00  1.00  1.00  0.00  4.00
-```
-
-Las columnas pueden representar:
-
-```text
-x1 | x2 | S1 | R1 | Solucion
-```
-
-Interpretación:
-
-- `S1` es la variable básica de esa fila.
-- `1.00` acompaña a `x1`.
-- `1.00` acompaña a `x2`.
-- `1.00` indica el coeficiente básico de `S1`.
-- `0.00` indica que `R1` no está presente.
-- `4.00` es el valor actual de `S1`.
-
----
-
-## 9. Significado de las iteraciones
-
-Cada iteración representa un cambio de solución básica.
-
-El algoritmo:
-
-1. Identifica una variable que puede mejorar la función objetivo.
-2. Decide cuál variable básica debe salir.
-3. Intercambia ambas variables.
-4. Recalcula toda la tabla.
-
-Las iteraciones continúan hasta que no exista una mejora posible.
-
----
-
-## 10. Casos finales
-
-### Solución óptima
-
-Ocurre cuando:
-
-- Ya no existe una columna que pueda mejorar Z.
-- No quedan variables artificiales positivas.
-
-El programa muestra `Z` y el valor de cada `x`.
-
-### Solución infactible
-
-Ocurre cuando una variable artificial `R` permanece en la base con un valor mayor que `0.001`.
-
-Las restricciones originales son incompatibles.
-
-### Solución ilimitada
-
-Ocurre cuando existe una columna que debe entrar, pero ningún coeficiente positivo permite seleccionar una fila de salida.
-
-El valor de Z puede crecer o disminuir indefinidamente según el objetivo.
-
----
-
-## 11. Variables internas principales
-
-| Variable | Tipo | Qué contiene |
-|---|---|---|
-| `M` | `float` o entero | Penalización grande |
-| `objetivo` | `str` | `"max"` o `"min"` |
-| `num_x` | `int` | Cantidad de variables originales |
-| `coef_z` | `list[float]` | Coeficientes de Z |
-| `num_rest` | `int` | Cantidad de restricciones |
-| `restricciones` | `list` | Coeficientes, signos y lados derechos |
-| `columnas` | `list[str]` | Nombres de todas las columnas |
-| `base` | `list[str]` | Variable básica de cada fila |
-| `vars_extra` | `list` | Holguras, excesos y artificiales |
-| `tabla` | `list[list[float]]` | Tabla simplex completa |
-| `col_pivote` | `int` | Índice de la columna que entra |
-| `fila_pivote` | `int` | Índice de la fila que sale |
-| `pivote` | `float` | Valor usado para pivotear |
-| `iteracion` | `int` | Número de iteración |
-
----
-
-## 12. Supuestos y limitaciones
-
-- Las variables originales se consideran mayores o iguales a cero.
-- Los valores deben poder convertirse con `float`.
-- `M` está fijo en `1000`.
-- La tolerancia para los pivotes es `0.00001`.
-- La tolerancia para variables artificiales positivas es `0.001`.
-- No hay interfaz gráfica.
-- No hay validación avanzada para valores incorrectos.
-- Los cálculos pueden presentar pequeños errores por punto flotante.
-- Las tablas grandes pueden requerir desplazamiento horizontal en consola.
-
----
-
-## 13. Archivos del proyecto
-
-- [gran_m.py](gran_m.py): contiene toda la lógica del método.
-- [README.md](README.md): explica el proyecto y el funcionamiento interno del código.
+- [gran_m.py](gran_m.py): Código fuente completo del programa (algoritmo simplex manual e interfaz gráfica en Tkinter).
+- [README.md](README.md): Documentación del proyecto, tecnologías y guía de uso.
+- [GUIA_ESTUDIO_GRAN_M.md](GUIA_ESTUDIO_GRAN_M.md): Guía de estudio personal con fundamentos teóricos, deducción matemática y preguntas frecuentes de examen (ignorado en Git para uso privado).

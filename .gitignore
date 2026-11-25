@@ -1,0 +1,8 @@
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Documento de estudio personal (no subir a GitHub)
+GUIA_ESTUDIO_GRAN_M.md
+guia_estudio.md
+apuntes_estudio.md
